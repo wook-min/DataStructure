@@ -24,16 +24,9 @@ public:
         head = nullptr;
     }
 
-    int empty()
+    bool empty()
     {
-        if (size == 0)
-        {
-            return 1;
-        }
-        else
-        {
-            return 0;
-        }
+        return (head == nullptr);
     }
 
     void push_front(T data)
@@ -71,16 +64,93 @@ public:
 
     void push_back(T data)
     {
-        Node* currentNode = head;
-        while (currentNode->next == nullptr)
-        {
-            currentNode = currentNode->next;
-        }
-
         Node* newNode = new Node;
         newNode->data = data;
-        currentNode->next = newNode;
         newNode->next = nullptr;
+
+        if (head == nullptr)
+        {
+            head = newNode;
+        }
+        else
+        {
+            Node* currentNode = head;
+
+            while (currentNode->next != nullptr)
+            {
+                currentNode = currentNode->next;
+            }
+
+            currentNode->next = newNode;
+        }
+        size++;
+    }
+
+    void pop_back()
+    {
+        if (size <= 0)
+        {
+            cout << "Linked List is Empty" << endl;
+        }
+        else if (size == 1)
+        {
+            Node* deleteNode = head;
+            head = deleteNode->next;
+            delete deleteNode;
+        }
+        else
+        {
+            Node* deleteNode = head;
+            Node* previousNode = nullptr;
+            while (deleteNode->next != nullptr)
+            {
+                previousNode = deleteNode;
+                deleteNode = deleteNode->next;
+            }
+            
+            previousNode->next = nullptr;
+            delete deleteNode;
+
+        }
+        size--;
+    }
+
+    void remove(T data)
+    {
+        if (head == nullptr)
+        {
+            return;
+        }
+        else
+        {
+            Node* deleteNode = head;
+            Node* previousNode = nullptr;
+
+            while (deleteNode->next != nullptr)
+            {
+                if (deleteNode->data == data)
+                {
+                    if (deleteNode == head)
+                    {
+                        head = head->next;
+                        previousNode = deleteNode;
+                        delete deleteNode;
+                        deleteNode = deleteNode->next;
+                    }
+                    else
+                    {
+                        delete deleteNode;
+                        deleteNode = deleteNode->next;
+                        previousNode = deleteNode;
+                    }
+                   
+
+                }
+
+                previousNode = deleteNode;
+                deleteNode = deleteNode->next;
+            }
+        }
     }
 
     void print_data()
@@ -102,15 +172,9 @@ public:
 
     ~List() 
     {
-        if (head != nullptr)
+        while (head != nullptr)
         {
-            Node* current = head;
-            while (current != nullptr)
-            {
-                Node* next = current->next;
-                delete current;
-                current = next;
-            }
+            pop_front();
         }
     }
 };
@@ -123,10 +187,14 @@ int main()
     list.push_front(5);
     list.push_front(1);
 
-    list.push_back(3);
+    list.push_back(10);
+    list.push_back(30);
+
+    list.remove(10);
 
     list.print_data();
 
+    //cout << "List is Empty? : " << list.empty() << endl;
 
 
     return 0;
