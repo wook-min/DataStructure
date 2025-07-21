@@ -1,2 +1,12 @@
 ﻿  Program.cpp
+C:\Users\com\Desktop\DataStructure\Program\Program.cpp(98,10): warning C4553: '==': 식의 결과가 사용되지 않습니다. '='을(를) 의도했습니까?
+      C:\Users\com\Desktop\DataStructure\Program\Program.cpp(98,10):
+      템플릿 인스턴스화 컨텍스트(가장 오래된 인스턴스화 컨텍스트)가
+          C:\Users\com\Desktop\DataStructure\Program\Program.cpp(150,12):
+          컴파일되는 클래스 템플릿 인스턴스화 'List<int>'에 대한 참조를 확인하세요.
+          C:\Users\com\Desktop\DataStructure\Program\Program.cpp(85,7):
+          클래스 템플릿 멤버 함수 'void List<int>::pop_back(void)'을(를) 컴파일하는 중입니다.
+              C:\Users\com\Desktop\DataStructure\Program\Program.cpp(160,15):
+              'main'에서 'List<int>::pop_back'에 대한 첫 번째 참조를 확인하세요.
+  
   Program.vcxproj -> C:\Users\com\Desktop\DataStructure\Program\x64\Debug\Program.exe

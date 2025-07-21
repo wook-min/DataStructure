@@ -3,61 +3,25 @@
 using namespace std;
 
 template <typename T>
-class List
+class Vector
 {
 private:
-	struct Node
-	{
-		T data;
-		Node* next;
-	};
-
-	int size;
-	Node* head;
+	int count;
+	int capacity;
+	T* arrary;
 public:
-	List()
+	Vector()
 	{
-		size = 0;
-		head = nullptr;
+		count = 0;
+		capacity = 0;
+		arrary = nullptr;
 	}
+	
 
-	void push_back(T data)
-	{
-		Node* newNode = new Node;
-		newNode->data = data;
-
-		if (head == nullptr)
-		{
-			head = newNode;
-			newNode->next = head;
-			head->next = newNode;
-		}
-		else
-		{
-			newNode->next = head;
-			head->next = newNode;
-
-			head = newNode;
-		}
-		size++;
-	}
-
-	void print_data()
-	{
-		if (size == 0)
-		{
-
-		}
-	}
 };
 
 int main()
 {
-	List<int> list;
-
-	list.push_back(10);
-	list.push_back(20);
-	list.push_back(30);
 
 	return 0;
 }
