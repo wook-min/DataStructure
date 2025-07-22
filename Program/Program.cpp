@@ -3,25 +3,38 @@
 using namespace std;
 
 template <typename T>
-class Vector
+class Stack
 {
 private:
 	int count;
 	int capacity;
-	T* arrary;
+	int highset;
+
+	T* container;
 public:
-	Vector()
+	Stack()
 	{
 		count = 0;
 		capacity = 0;
-		arrary = nullptr;
+		highset = -1;
+		container = nullptr;
 	}
-	
 
+	~Stack()
+	{
+		if (container != nullptr)
+		{
+			delete[] container;
+		}
+	}
 };
 
+
+// stack 구현
+// Last-in First-out
 int main()
 {
+
 
 	return 0;
 }
