@@ -2,54 +2,115 @@
 
 using namespace std;
 
-#define SIZE 4
-
-template<typename T>
-class Queue
+template <typename T>
+class PriorityQueue
 {
 private:
-	int rear;
-	int front;
-	T container[SIZE];
-
+	int index;
+	int capacity;
+	T* container;
 public:
-	Queue()
+	PriorityQueue()
 	{
-		rear = (SIZE - 1);
-		front = (SIZE - 1);
+		index = 0;
+		capacity = 0;
+		container = nullptr;
+	}
 
-		for (int i = 0; i < SIZE; i++)
+	void resize(int newSize)
+	{
+		capacity = newSize;
+		T* temporary = new T[capacity];
+		for (int i = 0; i < capacity; i++)
 		{
-			container[i] = NULL;
+			temporary[i] = NULL;
+		}
+
+		for (int i = 0; i < index; i++)
+		{
+			temporary[i] = container[i];
+		}
+
+		if (container != nullptr)
+		{
+			delete[] container;
+		}
+
+		container = temporary;
+	}
+
+	const bool& empty() { return (index == 0); }
+
+	const int& size() { return index; }
+
+	const T& top() 
+	{ 
+		if (index <= 0)
+		{
+			cout << "PriorityQueue is Empty" << endl;
+			return NULL;
+		}
+		else
+		{
+			return container[0];
 		}
 	}
 
 	void push(T data)
 	{
-		checkfront = front;
-		checkfront += (SIZE - 1);
-		checkfront %= SIZE;
+		if (index <= 0)
+		{
+			resize(1);
+		}
+		else if (index >= capacity)
+		{
+			resize(capacity * 2);
+		}
 
-		if (checkfront == rear) return;
+		container[index] = data;
 
-		++rear;
-		rear %= SIZE;
+		int child = index;
+		int parent = (child - 1) / 2;
 
-		container[rear] = data;
+		while (child != 0)
+		{
+			if (container[child] >= container[parent])
+			{
+				swap(container[parent], container[child]);
+			}
+
+			child = parent;
+			parent = (child - 1) / 2;
+		}
+
+		index++;
+	}
+
+	~PriorityQueue()
+	{
+		if (container != nullptr)
+		{
+			delete[] container;
+		}
 	}
 };
 
-// Queue 구현 (선형 큐와 원형 큐)
-// 선형 큐의 문제점을 해결한 구조가 원형 큐
-// rear가 선형적으로 증가하며, rear가 size끝까지 도달했을때
-// 큐가 비어있어도 더이상 넣지 못하는 현상이 발생
 
-// 원형 큐는 메모리 하나를 비워둔다.(재활용 할 수 있게.)
-// 크기는 고정(정적 배열)
-// Last-in Last-Out
+
+// 우선순위 큐 구현(Priority Queue)
+// 부모 자식 노드로 이루어져 있으며, 작은 노드는 왼쪽으로, 큰 노드는 우측으로 보내집니다.
+// 가장 큰 값이 항상 top에 위치합니다.
 int main()
 {
-	
+	PriorityQueue<int> priorityQueue;
+
+	priorityQueue.push(10);
+	priorityQueue.push(20);
+	priorityQueue.push(30);
+	priorityQueue.push(40);
+	priorityQueue.push(50);
+
+	cout << priorityQueue.top() << endl;
 
 	return 0;
 }
