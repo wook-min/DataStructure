@@ -2,115 +2,57 @@
 
 using namespace std;
 
-template <typename T>
-class PriorityQueue
+template<typename KEY, typename VALUE>
+class HashTable
 {
 private:
-	int index;
-	int capacity;
-	T* container;
+	struct Node
+	{
+		KEY key;
+		VALUE value;
+		Node* next;
+	};
+
+	struct Bucket
+	{
+		int count;
+		Node* head;
+	};
+
+	Bucket* bucket;
+	int size;
 public:
-	PriorityQueue()
+	HashTable()
 	{
-		index = 0;
-		capacity = 0;
-		container = nullptr;
+		size = 8;
+		bucket = new Bucket[size];
 	}
 
-	void resize(int newSize)
+	const int& hash_function(KEY key)
 	{
-		capacity = newSize;
-		T* temporary = new T[capacity];
-		for (int i = 0; i < capacity; i++)
-		{
-			temporary[i] = NULL;
-		}
-
-		for (int i = 0; i < index; i++)
-		{
-			temporary[i] = container[i];
-		}
-
-		if (container != nullptr)
-		{
-			delete[] container;
-		}
-
-		container = temporary;
-	}
-
-	const bool& empty() { return (index == 0); }
-
-	const int& size() { return index; }
-
-	const T& top() 
-	{ 
-		if (index <= 0)
-		{
-			cout << "PriorityQueue is Empty" << endl;
-			return NULL;
-		}
-		else
-		{
-			return container[0];
-		}
-	}
-
-	void push(T data)
-	{
-		if (index <= 0)
-		{
-			resize(1);
-		}
-		else if (index >= capacity)
-		{
-			resize(capacity * 2);
-		}
-
-		container[index] = data;
-
-		int child = index;
-		int parent = (child - 1) / 2;
-
-		while (child != 0)
-		{
-			if (container[child] >= container[parent])
-			{
-				swap(container[parent], container[child]);
-			}
-
-			child = parent;
-			parent = (child - 1) / 2;
-		}
-
-		index++;
-	}
-
-	~PriorityQueue()
-	{
-		if (container != nullptr)
-		{
-			delete[] container;
-		}
+		return ((unsigned int)key % size);
 	}
 };
 
 
 
-// 우선순위 큐 구현(Priority Queue)
-// 부모 자식 노드로 이루어져 있으며, 작은 노드는 왼쪽으로, 큰 노드는 우측으로 보내집니다.
-// 가장 큰 값이 항상 top에 위치합니다.
+// 
+
+// Hash Table 구현
+// size 8로 이루어진 동적 배열 구조
+// Key, Value 값을 기준으로 구현함
+
+// 해시 충돌 예방 방법
+// 체이닝, 
+// Open Addresing(개방주소법)
+// (선형 탐사법(Linear Probing), 제곱 탐사법(Quadratic Probing), 이중 해싱(Double Probing))
 int main()
 {
-	PriorityQueue<int> priorityQueue;
+	HashTable<const char*, int> hashtable;
 
-	priorityQueue.push(10);
-	priorityQueue.push(20);
-	priorityQueue.push(30);
-	priorityQueue.push(40);
-	priorityQueue.push(50);
+	cout << hashtable.hash_function("aabb");
+	cout << hashtable.hash_function("BBB");
 
-	cout << priorityQueue.top() << endl;
-
+	
 	return 0;
 }
