@@ -2,165 +2,42 @@
 
 using namespace std;
 
-template<typename KEY, typename VALUE>
-class HashTable
-{
-private:
-	struct Node
-	{
-		KEY key;
-		VALUE value;
-		Node* next;
-	};
+// 그래프 자료구조 (Graph Database) 구현
+// 길찾기(경로 당 가중치 고려), 퀘스트라인
+// - 그래프의 요소들
+// 1. vertex : 다양한 데이터 자료를 가지는 하나의 객체(int, float, string...)
+// 2. edge : 두 vertex 사이를 연결하는 간선
 
-	struct Bucket
-	{
-		int count;
-		Node* head;
-	};
+// - 그래프의 종류
+// 1. 방향 그래프 : vertex 사이의 edge에 가는 방향이 존재하는 그래프
+// >> 진입 차수 : 해당 vertex로 들어갈 수 있는 차수
+// >> 진출 차수 : 해당 vertex에서 나갈 수 있는 차수
 
-	Bucket* bucket;
-	int size;
-public:
-	HashTable()
-	{
-		size = 8;
-		bucket = new Bucket[size];
-		for (int i = 0; i < size; i++)
-		{
-			bucket[i].count = 0;
-			bucket[i].head = nullptr;
-		}
-		
-	}
+// 2. 무방향 그래프 : vertex 사이에 있는 edge를 통한 진입과 진출이 자유로운 그래프
+// 진입과 진출 차수가 연결된 edge 수와 같음
 
-	unsigned int hash_function(KEY key)
-	{
-		// const char*는 주소값이라 다른 문자열이라도 주소값이 비슷하여
-		// 해시 값이 동일할 수 있습니다
-		// 1. const char*만의 예외적인 처리 방식을 지정하세요.
-		// 2. 또는 std::string을 사용하세요.
-		std::hash<KEY> hash;
-		return hash(key) % size;
-	}
+// 3. 가중치 그래프 : edge(간선)에 가중치가 존재하는 그래프
 
-	// Insert 함수 구현
-	// 1. 해시 함수를 통해 값을 받는 임시 변수 hashIndex 생성
-	// 2. 새로운 노드를 작성해서, 얻은 key, value, *next 입력
-	void insert(KEY key, VALUE value)
-	{
-		int hashIndex = hash_function(key);
+// cycle이란 개념 : 하나의 vertex에서 vertex를 통해 돌고 돌아 다시 원래의 정점으로
+// 올 수 있다면, cycle이 존재한다는 개념
+// 자기 자신을 가리키는 vertex도 존재하며, 이것도 cycle이라 본다.
+// (일일퀘스트가 이에 해당, 조건이 맞으면 다시 시작)
 
-		Node* newNode = new Node;
-		newNode->key = key;
-		newNode->value = value;
-		newNode->next = nullptr;
+// - 그래프의 표현
+// 1. 인접 행렬
+// 3 x 3 행렬을 표현하기 위해, 3개의 vertex로 이루어진 그래프가 필요
+// 예를 들어, a-b, b-c인 무방향 그래프의 경우 대각 행렬
+//		a	b	c
+// a	0	1	0
+// b	1	0	1
+// c	0	1	0
+// 으로 표현이 가능하다.
+// 이중 포인터로 동적 2차원 배열을 만들어 구현가능
+// 2. 인접 리스트
 
-		// 노드가 1개라도 존재하지 않는다면
-		if (bucket[hashIndex].head == nullptr)
-		{
-			// bucket[hashIndex]의 head 포인터가 newNode를 가리키게 합니다.
-			bucket[hashIndex].head = newNode;
-		}
-		else
-		{
-			newNode->next = bucket[hashIndex].head;
-			bucket[hashIndex].head = newNode;
-		}
-
-		// bucket[hashIndex]의 count를 증가시킵니다.
-		bucket[hashIndex].count++;
-	}
-
-	const int& bucket_count()
-	{
-		return size;
-	}
-
-	// 1. 해시 함수를 통해서 값을 받는 임시 변수 (int hashIndex)
-	// 2. Node를 탐색할 수 있는 토인터 변수 선언 (Node* currentNode)
-	// 3. 이전 Node를 저장할 수 있는 포인터 변수가 필요 (Node* previousNode)
-	// 4. currentNode 가 nullptr과 같다면 함수를 종료합니다.
-	void erase(KEY key)
-	{
-		int hashIndex = hash_function(key);
-
-		Node* currentNode = bucket[hashIndex].head;
-		Node* previousNode = nullptr;
-
-		if (currentNode == nullptr)
-		{
-			cout << "Key doesn't Exist" << endl;
-			return;
-		}
-		else
-		{
-			int count = bucket[hashIndex].count;
-
-			while (currentNode != nullptr)
-			{
-				if (currentNode->key == key)
-				{
-					Node* deleteNode = currentNode;
-					currentNode = currentNode->next;
-					
-					if (previousNode == nullptr)
-					{
-						bucket[hashIndex].head = bucket[hashIndex].head->next;
-					}
-					else
-					{
-						previousNode->next = currentNode;
-					}
-	
-					delete deleteNode;
-					bucket[hashIndex].count--;
-				}
-				else
-				{
-					previousNode = currentNode;
-					currentNode = currentNode->next;
-				}
-			}
-
-			if (count == bucket[hashIndex].count)
-			{
-				cout << "Key doesn't Exist" << endl;
-			}
-		}
-
-	}
-};
-
-// Hash Table 구현
-// size 8로 이루어진 동적 배열 구조
-// Key, Value 값을 기준으로 구현함
-
-// 해시 충돌 예방 방법
-// 체이닝, 
-// Open Addresing(개방주소법)
-// (선형 탐사법(Linear Probing), 제곱 탐사법(Quadratic Probing), 이중 해싱(Double Probing))
-
-// 리해시가 일어난다면 시간복잡도가 증가
-// 
 int main()
 {
-	HashTable<std::string, int> hashtable;
 
-	// cout << hashtable.hash_function("Operator") << endl;
-	// cout << hashtable.hash_function("Yahoo") << endl;
-	// cout << hashtable.hash_function("Zazaza") << endl;
 
-	hashtable.insert("first", 10);
-	hashtable.insert("second", 20);
-	hashtable.insert("third", 30);
-
-	// cout << hashtable.bucket_count() << endl;
-
-	hashtable.erase("first");
-	hashtable.erase("first");
-	hashtable.erase("two");
-
-	
 	return 0;
 }
