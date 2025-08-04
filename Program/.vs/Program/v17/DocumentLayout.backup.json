@@ -5,9 +5,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{4AD49BF7-DC46-4DBF-A821-385D93C84872}|Program.vcxproj|C:\\Users\\com\\Desktop\\DataStructure\\Program\\Program.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{4AD49BF7-DC46-4DBF-A821-385D93C84872}|Program.vcxproj|solutionrelative:Program.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{10D40454-77BB-4603-8770-BF2D9BE552E3}|..\\Class 010th (Adjacency Matrix)\\Class 010th (Adjacency Matrix).vcxproj|C:\\Users\\com\\Desktop\\DataStructure\\Class 010th (Adjacency Matrix)\\Source.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -17,20 +14,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Source.cpp",
-              "DocumentMoniker": "C:\\Users\\com\\Desktop\\DataStructure\\Class 010th (Adjacency Matrix)\\Source.cpp",
-              "RelativeDocumentMoniker": "..\\Class 010th (Adjacency Matrix)\\Source.cpp",
-              "ToolTip": "C:\\Users\\com\\Desktop\\DataStructure\\Class 010th (Adjacency Matrix)\\Source.cpp",
-              "RelativeToolTip": "..\\Class 010th (Adjacency Matrix)\\Source.cpp",
-              "ViewState": "AgIAAEIAAAAAAAAAAAAAAEkAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-08-01T11:05:13.868Z"
-            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -39,7 +24,7 @@
               "RelativeDocumentMoniker": "Program.cpp",
               "ToolTip": "C:\\Users\\com\\Desktop\\DataStructure\\Program\\Program.cpp",
               "RelativeToolTip": "Program.cpp",
-              "ViewState": "AgIAACUAAAAAAAAAAAAAAFEAAAAQAAAAAAAAAA==",
+              "ViewState": "AgIAACAAAAAAAAAAAAAgwDUAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-07-15T11:08:03.978Z",
               "EditorCaption": ""

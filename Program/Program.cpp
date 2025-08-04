@@ -3,192 +3,87 @@
 using namespace std;
 
 template <typename T>
-class Graph
+class Set
 {
 private:
 	struct Node
 	{
 		T data;
-		Node* next;
-
-		Node(T data, Node* link = nullptr)
-		{
-			this->data = data;
-			next = link;
-		}
+		Node* left;
+		Node* right;
 	};
-	
-	int size;		// 정점의 개수
-	int capacity;	// 최대 용량
-	int count;		// 인접 리스트의 크기
 
-	T* vertex;		// 정점의 집합
-	Node** list;	// 인접 리스트(더블 포인터)
-	
+	int size;
+
+	Node* root;
 public:
-	Graph()
+	Set()
 	{
 		size = 0;
-		capacity = 0;
-		count = 0;
 
-		vertex = nullptr;
-		list = nullptr;
-		
+		root = nullptr;
 	}
 
-	void resize(int newSize)
+	void insert(T data)
 	{
-		capacity = newSize;
-		T* newVertex = new T[capacity];
+		Node* newNode = new Node[data];
+		newNode->left = nullptr;
+		newNode->right = nullptr;
 
-		for (int i = 0; i < capacity; i++)
+		if (root == nullptr)
 		{
-			newVertex[i] = NULL;
-		}
-
-		if (vertex != nullptr)
-		{
-			if (capacity >= size)
-			{
-				for (int i = 0; i < size; i++)
-				{
-					newVertex[i] = vertex[i];
-				}
-			}
-			delete[] vertex;
-		}
-
-		vertex = newVertex;
-	}
-
-	void resize()
-	{
-		Node** newList = new Node * [size];
-		for (int i = 0; i < size; i++)
-		{
-			newList[i] = nullptr;
-		}
-
-		if (size >= count)
-		{
-			for (int i = 0; i < count; i++)
-			{
-				newList[i] = list[i];
-			}
-
-			delete[] list;
-			list = newList;
-			count = size;
-		}
-	}
-
-	void push(T data)
-	{
-		if (capacity <= 0)
-		{
-			resize(1);
-		}
-		else if (capacity <= size)
-		{
-			resize(2 * capacity);
-		}
-
-		vertex[size++] = data;
-	}
-
-	void edge(int i, int j)
-	{
-		if (size <= 0)
-		{
-			cout << "Adjacency List is Empty" << endl;
-		}
-		else if (size <= i || size <= j)
-		{
-			cout << "Index Out of Range" << endl;
+			root = newNode;
 		}
 		else
 		{
-			if (list == nullptr)
+			Node* currentNode = root;
+			while (currentNode != nullptr)
 			{
-				list = new Node * [size];
-
-				for (int i = 0; i < size; i++)
+				if (newNode->data < currentNode->data)
 				{
-					list[i] = nullptr;
+					currentNode = currentNode->left;
 				}
-
-				count = size;
-			}
-			else if (count <= size)
-			{
-				resize();
-			}
-
-			list[i] = new Node(vertex[j], list[i]);
-			list[j] = new Node(vertex[i], list[j]);
-		}
-	}
-
-	~Graph()
-	{
-		if (vertex != nullptr)
-		{
-			delete[] vertex;
-		}
-
-		for (int i = 0; i < size; i++)
-		{
-			if (list[i] != nullptr)
-			{
-				if (list[i]->next == nullptr)
+				else if (newNode->data == currentNode->data)
 				{
-					delete list[i];
+					cout << "Node already have " << newNode->data << endl;
+					return;
 				}
 				else
 				{
-					Node* deleteNode = list[i];
-					Node* nextNode = list[i]->next;
-
-					while (nextNode != nullptr)
-					{
-						delete deleteNode;
-						deleteNode = nextNode;
-						nextNode = nextNode->next;
-					}
+					currentNode = currentNode->right;
 				}
 			}
-			else
-			{
-				continue;
-			}
+
+			currentNode = newNode;
 		}
 
-		delete[] list;
+		size++;
 	}
+
 };
 
+
+// 이진 트리 구현
 int main()
 {
-	// 퀘스트 : 상태 전이 그래프 DAG
-	// 인접리스트는 선행 조건 탐색이 비효율적, 중간에 퀘스트라인 파악이 어려움
-	// 정점이 적고 간선이 많다 >> 인접행렬 구조
-	// 정점이 많고 간선이 적다 >> 인접리스트 구조
-	// KENNEY 에셋사이트!
+	// 트리 용어
+	// vertex와 Node : 트리를 구성하는 기본 요소
+	// Node는 데이터를 담는 data, left, right 자식 포인터로 구성
+	// edge : vertex 사이를 연결해주는 간선
+	// Root Node : 트리의 최상단에 위치한 노드
+	// 이진 탐색 트리 : 좌측 자식노드에는 작은 값을, 우측 자식노드에는 큰 값을 배치
+	// Leaf Node : 자식을 가지지 않은 노드
+	// 트리의 종류
+	// 완전 이진 트리 : 왼쪽에서부터 채워진 트리
+	// 편향 이진 트리 : 트리가 오른쪽으로 치우쳐서 시간 복잡도가 0(n)과 유사하게 된 트리
 
-	Graph<int> graph;
-	
-	graph.push(10);
-	graph.push(20);
-	graph.push(30);
-	graph.edge(0, 2);
+	Set<int> set;
 
-	graph.push(40);
-	graph.push(50);
-
-	graph.edge(0, 4);
-	graph.edge(0, 6);
-
+	set.insert(10);
+	set.insert(5);
+	set.insert(15);
+	set.insert(7);
+	set.insert(18);
 
 	return 0;
 }
