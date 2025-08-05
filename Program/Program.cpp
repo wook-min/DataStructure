@@ -9,24 +9,26 @@ private:
 	struct Node
 	{
 		T data;
-		Node* left;
-		Node* right;
+		Node* left = nullptr;
+		Node* right = nullptr;
+
+		Node(T data)
+		{
+			this->data = data;
+		}
 	};
 
-	int size;
 
 	Node* root;
 public:
 	Set()
 	{
-		size = 0;
-
 		root = nullptr;
 	}
 
 	void insert(T data)
 	{
-		Node* newNode = new Node[data];
+		Node* newNode = new Node(data);
 		newNode->left = nullptr;
 		newNode->right = nullptr;
 
@@ -39,25 +41,155 @@ public:
 			Node* currentNode = root;
 			while (currentNode != nullptr)
 			{
-				if (newNode->data < currentNode->data)
+				if (newNode->data == currentNode->data)
 				{
-					currentNode = currentNode->left;
-				}
-				else if (newNode->data == currentNode->data)
-				{
-					cout << "Node already have " << newNode->data << endl;
+					delete newNode;
 					return;
 				}
 				else
 				{
+					if (newNode->data < currentNode->data)
+					{
+						if (currentNode->left == nullptr)
+						{
+							currentNode->left = newNode;
+							break;
+						}
+						else
+						{
+							currentNode = currentNode->left;
+						}
+
+					}
+					else
+					{
+						if (currentNode->right == nullptr)
+						{
+							currentNode->right = newNode;
+							break;
+						}
+						else
+						{
+							currentNode = currentNode->right;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	void release(Node* root)
+	{
+		if (root == nullptr) return;
+
+		release(root->left); // 왼쪽 끝까지 이동
+		release(root->right); // 그 후 우측으로 이동
+
+		delete root; // 노드 삭제 후 이전 release로 이동
+
+	}
+
+	// 고려할 조건
+	// 1. 자식 노드가 하나도 없을 때
+	// 2. 자식 노드가 하나만 있을 때
+	// 3. 자식 노드가 둘 다 있을 때
+	void erase(T data)
+	{
+		Node* currentNode = root;
+		Node* parentsNode = root;
+		int check = -1;
+
+		if (currentNode == nullptr)
+		{
+			cout << "Node doesn't have data" << endl;
+		}
+		else
+		{
+			while (currentNode != nullptr)
+			{
+				if (data < currentNode->data)
+				{
+					parentsNode = currentNode;
+					currentNode = currentNode->left;
+					check = 0;
+				}
+				else if (data > currentNode->data)
+				{
+					parentsNode = currentNode;
 					currentNode = currentNode->right;
+					check = 1;
+				}
+				else
+				{
+					if (currentNode == root)
+					{
+						root = nullptr;
+						delete currentNode;
+						break;
+					}
+					else
+					{
+						// 자식이 두개 있을 때
+						if (currentNode->left != nullptr && currentNode->right != nullptr)
+						{
+							break;
+						}
+						// 자식이 하나만 있을 때
+						else if (currentNode->left != nullptr)
+						{
+							break;
+						}
+						else if (currentNode->right != nullptr)
+						{
+							break;
+						}
+						// 자식이 없을 때
+						else
+						{
+							switch (check)
+							{
+							case 0:
+								parentsNode->left = nullptr;
+								delete currentNode;
+								break;
+							case 1:
+								parentsNode->right = nullptr;
+								delete currentNode;
+								break;
+							}
+							break;
+						}
+					}
 				}
 			}
 
-			currentNode = newNode;
+			cout << "Node doesn't have data" << endl;
 		}
+	}
 
-		size++;
+	void erase(T data, int a)
+	{
+		Node* currentNode = root;
+
+		while (currentNode != nullptr && currentNode->data != data)
+		{
+			if (currentNode->data > data)
+			{
+				currentNode = currentNode->left;
+			}
+			else
+			{
+				currentNode = currentNode->right;
+			}
+		}
+	}
+
+	~Set()
+	{
+		if (root != nullptr)
+		{
+			release(root);
+		}
 	}
 
 };
@@ -84,6 +216,7 @@ int main()
 	set.insert(15);
 	set.insert(7);
 	set.insert(18);
+	
 
 	return 0;
 }
