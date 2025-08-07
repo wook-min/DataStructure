@@ -131,6 +131,54 @@ public:
 		}
 	}
 
+	void remove(T data)
+	{
+		Node* currentNode = head;
+		Node* previousNode = nullptr;
+
+		int count = size;
+
+		if (currentNode == nullptr)
+		{
+			cout << "Linked List is Empty" << endl;
+			return;
+		}
+		else
+		{
+			for (int i = 0; i < count; i++)
+			{
+				if (currentNode->data == data)
+				{
+					if (currentNode == head)
+					{
+						currentNode = currentNode->next;
+						pop_back();
+					}
+					else if (currentNode == head->next)
+					{
+						currentNode = currentNode->next;
+						pop_front();
+					}
+					else
+					{
+						if (previousNode != nullptr)
+						{
+							previousNode->next = currentNode->next;
+							delete currentNode;
+							currentNode = previousNode->next;
+						}
+						size--;
+					}
+				}
+				else
+				{
+					previousNode = currentNode;
+					currentNode = currentNode->next;
+				}
+			}
+		}
+	}
+
 	bool empty()
 	{
 		return (head == nullptr);
@@ -152,13 +200,17 @@ int main()
 	list.push_back(10);
 	list.push_back(20);
 	list.push_back(30);
+	list.push_back(5);
 
 	list.push_front(5);
 	list.push_front(3);
+	list.push_front(10);
 
-	list.pop_front();
-	list.pop_back();
+	// list.pop_front();
+	// list.pop_back();
 
+	list.remove(10);
+	list.remove(5);
 
 	list.print_data();
 
